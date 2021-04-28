@@ -8,6 +8,8 @@
 #include <map>
 #include <iomanip>
 #include <fstream>
+#include <algorithm>
+
 using namespace std;
 
 const double eps = 0.001;
@@ -87,10 +89,26 @@ namespace ariel {
         return output;
     }
 
-     istream& operator>>(istream& input ,NumberWithUnits& n) {
-         string str;
-         input >> n.amount >> str >> n.unit;
-         return input;   
+     istream& operator>>(istream& input, NumberWithUnits& n){
+         std::string str;
+         char c = ' ';
+         double num =0;
+         input >> num;
+         input >> c;
+
+         while (c != ']') {
+             if (c != '[') {
+                 str.insert(str.end(),c);
+             }
+             input >> c; 
+         }
+
+         if (tab[str].empty()) {
+              throw invalid_argument{"Cannot find units"};   
+         }
+         n.unit = str;
+         n.amount = num;
+         return input;
     }
 
 
