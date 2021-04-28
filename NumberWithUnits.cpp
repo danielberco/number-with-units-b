@@ -1,3 +1,8 @@
+/*
+* CPP - Assigment 3 part B
+* Author : Daniel Berkovich
+* http://github.com/danielberco
+*/
 #include "NumberWithUnits.hpp"
 #include <iostream>
 #include <map>
@@ -6,7 +11,6 @@
 using namespace std;
 
 const double eps = 0.001;
-
 
 namespace ariel {
     static map <string,map <string,double>> tab;
@@ -19,6 +23,9 @@ namespace ariel {
         this-> unit = unit;
     }
 
+    /*
+     Convert units according to the value
+    */
     double convertUnit (double amount, const string& src , const string& dest) {
         if (src == dest) {
             return amount;
@@ -46,6 +53,9 @@ namespace ariel {
 
 
 
+    /*
+     Reading the file according to units_file.txt
+    */
     void NumberWithUnits::read_units(ifstream& units_file) {
         string read,u1,u2;
         double x = 0;
@@ -69,6 +79,9 @@ namespace ariel {
         }
     }
 
+    /*
+    Input/Output overloading 
+    */
     ostream& operator<<(ostream& output ,const NumberWithUnits& n) {
         output << n.amount << "[" << n.unit << "]";
         return output;
@@ -92,8 +105,8 @@ namespace ariel {
         return op;
     }
 
-     NumberWithUnits NumberWithUnits::operator+=(const NumberWithUnits& n) {
-        this->amount += convertUnit(n.amount,n.unit,this->unit);
+     NumberWithUnits& NumberWithUnits::operator+=(const NumberWithUnits& n) {
+       *this = *this + n;
         return *this;
     }
 
@@ -108,13 +121,13 @@ namespace ariel {
         return op;
     }
 
-    NumberWithUnits NumberWithUnits::operator-=(const NumberWithUnits& n) {
+    NumberWithUnits& NumberWithUnits::operator-=(const NumberWithUnits& n) {
         this->amount -= convertUnit(n.amount,n.unit,this->unit);
         return *this;
     }
 
 
-    NumberWithUnits NumberWithUnits::operator++() {
+    NumberWithUnits& NumberWithUnits::operator++() {
         ++(this->amount);
         return *this;
     }
@@ -123,7 +136,7 @@ namespace ariel {
         return NumberWithUnits((this->amount)++,this->unit);
     }
 
-     NumberWithUnits NumberWithUnits::operator--() {
+     NumberWithUnits& NumberWithUnits::operator--() {
         --(this->amount);
         return *this;
     }
@@ -132,11 +145,11 @@ namespace ariel {
         return NumberWithUnits((this->amount)--,this->unit);
     }
 
-    NumberWithUnits operator*(NumberWithUnits& n1, double n2) {
+    NumberWithUnits operator*(const NumberWithUnits& n1, double n2) {
         return NumberWithUnits(n1.amount*n2,n1.unit);
     }
 
-    NumberWithUnits operator*( double n2,NumberWithUnits& n1) {
+    NumberWithUnits operator*(double n2,const NumberWithUnits& n1) {
         return NumberWithUnits(n1.amount*n2,n1.unit);
     }
 
